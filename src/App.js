@@ -5,93 +5,81 @@ import Messages from './Messages';
 import AddMessage from './AddMessage';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      messages: [],
+
+  constructor(props) {
+    super(props);
+    this.state = { messages: props.messages };
+  }
+
+  toggleStar = (message) => {
+    console.log('This is the message: ', message);
+  };
+
+  toggleStar = (message) => {
+      const messages = this.state.messages.slice();
+      const index = this.state.messages.indexOf(message);
+      messages[index].starred = !messages[index].starred;
+      this.setState({ messages: messages });
     };
-  }
 
-  componentWillMount() {
-    this.setState({
-      messages: [
-    {
-        id: 1,
-        subject: "You can't input the protocol without calculating the mobile RSS protocol!",
-        read: false,
-        starred: true,
-        labels: ['dev', 'personal'],
-      },
-    {
-        id: 2,
-        subject: "connecting the system won't do anything, we need to input the mobile AI panel!",
-        read: false,
-        starred: false,
-        selected: true,
-        labels: [],
-      },
-    {
-        id: 3,
-        subject: 'Use the 1080p HTTP feed, then you can parse the cross-platform hard drive!',
-        read: false,
-        starred: true,
-        labels: ['dev'],
-      },
-    {
-        id: 4,
-        subject: 'We need to program the primary TCP hard drive!',
-        read: true,
-        starred: false,
-        selected: true,
-        labels: [],
-      },
-    {
-        id: 5,
-        subject: 'If we override the interface, we can get to the HTTP feed through the virtual EXE interface!',
-        read: false,
-        starred: false,
-        labels: ['personal'],
-      },
-    {
-        id: 6,
-        subject: 'We need to back up the wireless GB driver!',
-        read: true,
-        starred: true,
-        labels: [],
-      },
-    {
-        id: 7,
-        subject: 'We need to index the mobile PCI bus!',
-        read: true,
-        starred: false,
-        labels: ['dev', 'personal'],
-      },
-    {
-        id: 8,
-        subject: 'If we connect the sensor, we can get to the HDD port through the redundant IB firewall!',
-        read: true,
-        starred: true,
-        labels: [],
-      },
-  ],
-    });
-  }
+  toggleSelect = (message) => {
+    const messages = this.state.messages.slice();
+    const index = this.state.messages.indexOf(message);
+    messages[index].selected = !messages[index].selected;
+    this.setState({ messages: messages });
+  };
 
-handleAddMessages(message) {
-    let messages = this.state.messages;
-    messages.push(message);
-    this.setState({ messages: messages})
-}
+  toggleRead = (message) => {
+    const messages = this.state.messages.slice();
+    const index = this.state.messages.indexOf(message);
+    messages[index].read = !messages[index].read;
+    this.setState({ messages: messages });
+  };
+
+  addLabel = (message) => {
+    const messages = this.state.messages.slice();
+    this.setState({ messages: messages.forEach(message => {
+        return console.log(message.labels);
+      }), });
+  };
+
+  toggleDelete = (message) => {
+    const messages = this.state.messages.slice();
+    this.setState({ messages: messages.filter(message => {
+        return !message.selected;
+      }), });
+  };
+
   render() {
     return (
-      <div className="App">
+      <div>
+         <div className="navbar navbar-default" role="navigation">
+           <div className="container">
+             <div className="navbar-header">
+               <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                 <span className="sr-only">Toggle navigation</span>
+                 <span className="icon-bar"></span>
+                 <span className="icon-bar"></span>
+                 <span className="icon-bar"></span>
+               </button>
+               <a className="navbar-brand" href="/">React Inbox</a>
+             </div>
+           </div>
+         </div>
 
-        <Toolbar/>
-        <AddMessage addMessage={this.handleAddMessages.bind(this)}/>
-        <Messages messages={this.state.messages}/>
-      </div>
+         <div className="container">
+          <Toolbar toggleDelete={this.toggleDelete} addLabel={this.addLabel}/>
+          <AddMessage />
+           <Messages
+            messages={this.state.messages}
+            toggleStar={this.toggleStar}
+            toggleSelect={this.toggleSelect}
+            toggleRead={this.toggleRead}
+
+            />
+         </div>
+       </div>
     );
   }
 }
-
 export default App;
