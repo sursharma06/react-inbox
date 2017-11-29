@@ -36,10 +36,14 @@ class App extends Component {
     this.setState({ messages: messages });
   };
 
-  addLabel = (message) => {
+  addLabel = (label) => {
     const messages = this.state.messages.slice();
-    this.setState({ messages: messages.forEach(message => {
-        return console.log(message.labels);
+    this.setState({ messages: messages.map(message => {
+        if (message.selected && !message.labels.includes(label)) {
+          message.labels.push(label);
+        }
+
+        return message;
       }), });
   };
 
@@ -75,7 +79,7 @@ class App extends Component {
             toggleStar={this.toggleStar}
             toggleSelect={this.toggleSelect}
             toggleRead={this.toggleRead}
-
+            toggleDelete={this.toggleDelete}
             />
          </div>
        </div>

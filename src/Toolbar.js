@@ -2,6 +2,11 @@ import React from 'react';
 
 const Toolbar = ({ toggleDelete, addLabel }) => {
 
+    const handleChange = (e) => {
+      e.preventDefault();
+      addLabel(e.target.value);
+    };
+
     return (
 
 <div className="row toolbar">
@@ -23,7 +28,7 @@ const Toolbar = ({ toggleDelete, addLabel }) => {
       Mark As Unread
     </button>
 
-    <select className="form-control label-select" onClick={addLabel}>
+    <select className="form-control label-select" onChange={handleChange}>
       <option>Apply label</option>
       <option value="dev">dev</option>
       <option value="personal">personal</option>
