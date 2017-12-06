@@ -8,7 +8,7 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { messages: props.messages };
+    this.state = { messages: [] };
   }
 
   toggleStar = (message) => {
@@ -36,11 +36,46 @@ class App extends Component {
     this.setState({ messages: messages });
   };
 
+  markAsRead = () => {
+    const messages = this.state.messages.slice();
+    const selectedMessages = messages.filter(message => message.selected === true);
+    const selectedIndex = selectedMessages.map(message => messages.indexOf(message));
+    selectedIndex.forEach(index => {
+      messages[index].read = true;
+      messages[index].selected = !messages[index].selected;
+      this.setState({ messages: messages });
+    });
+  };
+
+  markAsUnread = () => {
+    const messages = this.state.messages.slice();
+    const selectedMessages = messages.filter(message => message.selected === true);
+    const selectedIndex = selectedMessages.map(message => messages.indexOf(message));
+    selectedIndex.forEach(index => {
+      messages[index].read = false;
+      messages[index].selected = !messages[index].selected;
+      this.setState({ messages: messages });
+    });
+  };
+
   addLabel = (label) => {
     const messages = this.state.messages.slice();
     this.setState({ messages: messages.map(message => {
         if (message.selected && !message.labels.includes(label)) {
           message.labels.push(label);
+        }
+
+        return message;
+      }), });
+  };
+
+  removeLabel = (label) => {
+    const messages = this.state.messages.slice();
+    this.setState({ messages: messages.map(message => {
+        if (message.selected && message.labels.includes(label)) {
+          let labelIndex = message.labels.indexOf(label);
+          message.labels.splice(labelIndex, 1);
+
         }
 
         return message;
@@ -53,6 +88,14 @@ class App extends Component {
         return !message.selected;
       }), });
   };
+
+  async componentDidMount() {
+    const messagesUrl = 'http://localhost:8000/messages';
+    // Get messages data from backend API
+    await fetch(messagesUrl)
+      .then(response => response.json())
+      .then(data => this.setState({ messages: data }));
+  }
 
   render() {
     return (
@@ -72,7 +115,7 @@ class App extends Component {
          </div>
 
          <div className="container">
-          <Toolbar toggleDelete={this.toggleDelete} addLabel={this.addLabel}/>
+          <Toolbar messages={this.state.messages} toggleDelete={this.toggleDelete} addLabel={this.addLabel} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} removeLabel={this.removeLabel}/>
           <AddMessage />
            <Messages
             messages={this.state.messages}
