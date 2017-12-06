@@ -89,6 +89,21 @@ class App extends Component {
       }), });
   };
 
+  addMessage = (subject) => {
+    const messages = this.state.messages.slice();
+    const message = {};
+    if (subject === '') {
+      this.setState({ messages: messages });
+    }
+
+    message.id = this.state.messages.indexOf(message);
+    message.subject = subject;
+    message.read = false;
+    message.starred = false;
+    message.labels = [];
+    this.setState({ messages: [...messages, message], subject: '' });
+  };
+
   async componentDidMount() {
     const messagesUrl = 'http://localhost:8000/messages';
     // Get messages data from backend API
@@ -116,7 +131,7 @@ class App extends Component {
 
          <div className="container">
           <Toolbar messages={this.state.messages} toggleDelete={this.toggleDelete} addLabel={this.addLabel} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} removeLabel={this.removeLabel}/>
-          <AddMessage />
+          <AddMessage messages={this.state.messages} addMessage={this.addMessage}/>
            <Messages
             messages={this.state.messages}
             toggleStar={this.toggleStar}

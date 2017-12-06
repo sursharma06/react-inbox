@@ -10,8 +10,10 @@ const Messages = ({
    toggleDelete,
 
  }) => {
-  const messageComponents = messages.map(message => (
-    <Message
+
+  return (
+    <div>
+    {messages.map(message => (<Message
       key={message.id}
       message={message}
       toggleStar={toggleStar}
@@ -20,11 +22,7 @@ const Messages = ({
 
       toggleDelete={toggleDelete}
       />
-  ));
-
-  return (
-    <div>
-       {messageComponents}
+     ))}
      </div>
   );
 };

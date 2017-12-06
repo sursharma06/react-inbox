@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
 
 class AddMessage extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      newMessage: {},
+      newMessage: '',
+      text: '',
+      addMessage: props.addMessage,
     };
   }
 
-  handleSubmit(e) {
-    if (this.refs.subject.value === '') {
-      alert('subject is required');
-    } else {
-      this.setState({ newMessage: {
-        subject: this.refs.subject.value,
-      }, }, function () {
-        this.props.addMessage(this.state.newMessage);
-      });
-    }
+  handleChange = (e) => {
+    let newMessage = e.target.value;
+    this.setState({ newMessage: newMessage, text: e.target.value });
+  };
+
+  handleSubmit = (e) => {
 
     e.preventDefault();
-  }
+    this.state.addMessage(this.state.newMessage);
+  };
 
   render() {
     return (
-      <form className="form-horizontal well" onSubmit={this.handleSubmit.bind(this)}>
+      <form className="form-horizontal well" onSubmit={this.handleSubmit}>
   <div className="form-group">
     <div className="col-sm-8 col-sm-offset-2">
       <h4>Compose Message</h4>
@@ -32,8 +31,8 @@ class AddMessage extends Component {
   </div>
   <div className="form-group">
     <label htmlFor="subject" className="col-sm-2 control-label">Subject</label>
-    <div className="col-sm-8">
-      <input ref="subject" type="text" className="form-control" id="subject" placeholder="Enter a subject" name="subject"/>
+    <div className="col-sm-8" onChange={this.handleChange}>
+      <input ref="subject" value={this.state.text} type="text" className="form-control" id="subject" placeholder="Enter a subject" name="subject"/>
     </div>
   </div>
   <div className="form-group">
