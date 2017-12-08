@@ -28,6 +28,10 @@ const Message = ({
   };
 
   const displayLabel = () => {
+      if (message.labels === null) {
+        message.labels = [];
+      }
+
       return message.labels.map((label, i) => {
         return <span key={i} className="label label-warning">{label}</span>;
       });

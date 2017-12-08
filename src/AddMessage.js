@@ -4,21 +4,26 @@ class AddMessage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newMessage: '',
-      text: '',
+      value: '',
       addMessage: props.addMessage,
     };
   }
 
   handleChange = (e) => {
-    let newMessage = e.target.value;
-    this.setState({ newMessage: newMessage, text: e.target.value });
+    let name = e.target.name;
+    let value = e.target.value;
+    let text = e.target.value;
+    this.setState({
+      [name]: value,
+      [text]: value,
+    });
   };
 
   handleSubmit = (e) => {
 
     e.preventDefault();
-    this.state.addMessage(this.state.newMessage);
+    this.state.addMessage(this.state.subject, this.state.body);
+    this.setState({ text: '' });
   };
 
   render() {
@@ -37,8 +42,8 @@ class AddMessage extends Component {
   </div>
   <div className="form-group">
     <label htmlFor="body" className="col-sm-2 control-label">Body</label>
-    <div className="col-sm-8">
-      <textarea name="body" id="body" className="form-control"></textarea>
+    <div className="col-sm-8" >
+      <textarea name="body" id="body" className="form-control" value={this.state.text}></textarea>
     </div>
   </div>
   <div className="form-group">

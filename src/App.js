@@ -89,7 +89,7 @@ class App extends Component {
       }), });
   };
 
-  addMessage = (subject) => {
+  addMessage = (subject, body) => {
     const messages = this.state.messages.slice();
     const message = {};
     if (subject === '') {
@@ -98,10 +98,23 @@ class App extends Component {
 
     message.id = this.state.messages.indexOf(message);
     message.subject = subject;
+    message.body = body;
     message.read = false;
     message.starred = false;
-    message.labels = [];
-    this.setState({ messages: [...messages, message], subject: '' });
+
+    const postUrl = 'http://localhost/8000/messages';
+    fetch(postUrl, {
+      method: 'POST',
+      body: JSON.stringify(message),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(message => {
+      this.setState({ messages: messages });
+    });
   };
 
   async componentDidMount() {
